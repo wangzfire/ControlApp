@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:layout_marginRight="20dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="30dp"
+            android:text="所属系列"
+            android:textSize="16sp" />
+
+        <Spinner
+            android:id="@+id/spinner_one"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"></Spinner>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:layout_marginRight="20dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="30dp"
+            android:text="所属主体"
+            android:textSize="16sp" />
+
+        <Spinner
+            android:id="@+id/spinner_two"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"></Spinner>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:layout_marginRight="20dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="30dp"
+            android:text="所属单位"
+            android:textSize="16sp" />
+
+        <Spinner
+            android:id="@+id/spinner_three"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"></Spinner>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:layout_marginRight="20dp"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="30dp"
+            android:layout_weight="1"
+            android:gravity="left"
+            android:text="显示流量"
+            android:textSize="16sp" />
+
+        <ImageView
+            android:id="@+id/image"
+            android:layout_width="50dp"
+            android:layout_height="30dp"
+            android:clickable="true"
+            android:src="@mipmap/kaiguan1" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:layout_marginRight="20dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="30dp"
+            android:text="输入来源域名"
+            android:textSize="16sp" />
+
+        <EditText
+            android:id="@+id/et_code"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:background="@drawable/edt_background"
+            android:src="@mipmap/kaiguan1" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/setting"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:layout_marginTop="30dp"
+        android:background="#ff336699"
+        android:gravity="center"
+        android:text="确 认"
+        android:textColor="@android:color/white" />
+</LinearLayout>
