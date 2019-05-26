@@ -15,7 +15,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="30dp"
-            android:text="所属系列"
+            android:text="选项1"
             android:textSize="16sp" />
 
         <Spinner
@@ -35,7 +35,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="30dp"
-            android:text="所属主体"
+            android:text="选项2"
             android:textSize="16sp" />
 
         <Spinner
@@ -55,7 +55,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="30dp"
-            android:text="所属单位"
+            android:text="选项3"
             android:textSize="16sp" />
 
         <Spinner
@@ -78,7 +78,7 @@
             android:layout_marginRight="30dp"
             android:layout_weight="1"
             android:gravity="left"
-            android:text="显示流量"
+            android:text="开关1"
             android:textSize="16sp" />
 
         <ImageView
@@ -100,7 +100,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="30dp"
-            android:text="输入来源域名"
+            android:text="输入框1"
             android:textSize="16sp" />
 
         <EditText

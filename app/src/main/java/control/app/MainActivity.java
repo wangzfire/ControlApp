@@ -7,24 +7,16 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.util.Log;
 import android.widget.Toast;
-
-import java.io.IOException;
-import java.net.InetAddress;
-import java.net.Socket;
-import java.net.UnknownHostException;
-import java.net.InetSocketAddress;
 
 /**
  * Created on 2019/5/11
- * @author sssl
+ * @author wangsssl
  */
 public class MainActivity extends AppCompatActivity {
     //声明控件
     Button buttonConnect;//连接按钮
     EditText editTextIPAdress, editTextPort;//ip地址和端口号的编辑框
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,43 +32,22 @@ public class MainActivity extends AppCompatActivity {
     private View.OnClickListener buttonConnectClick = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        if (!TextUtils.isEmpty(editTextIPAdress.getText()) && !TextUtils.isEmpty(editTextPort.getText())) {
-                            InetAddress ipAddress = InetAddress.getByName(editTextIPAdress.getText().toString());//获取IP地址
-                            int port = Integer.valueOf(editTextPort.getText().toString());//获取端口号
-                            //create a socket to make the connection with the server
-                            //开启服务器
-                            try {
-                                Log.v("MainActivity", "Log.v输入日志信息" + ipAddress);
-                                Log.v("MainActivity", "Log.v输入日志信息" + port);
-                                Socket SocketService = new SocketService(ipAddress, port);
-                                if (SocketService.isConnected()) {
-                                    SocketService.setKeepAlive(true);
-                                    Log.v("MainActivity", "连接成功");
-//                                    Toast.makeText(MainActivity.this, "'连接成功'", Toast.LENGTH_SHORT).show();
-                                 //   new AcceptSocket(mSocket).start();
-//                                    //连接成功 跳转页面
-                                    Intent intent = new Intent();
-                                    intent.setClass(MainActivity.this, SetActivity.class);
-                                    startActivity(intent);
+            //判断是否有输入内容
+            if (!TextUtils.isEmpty(editTextIPAdress.getText()) && !TextUtils.isEmpty(editTextPort.getText())) {
+                String  ipAddress = editTextIPAdress.getText().toString();//获取IP地址
+                int port = Integer.valueOf(editTextPort.getText().toString());//获取端口号
+                //create a socket to make the connection with the server
+                SocketIntentService.startService(MainActivity.this,ipAddress,port,5000);
 
-                                } else {
-                                    Toast.makeText(MainActivity.this, "'连接失败'", Toast.LENGTH_SHORT).show();
-                                }
-                            } catch (IOException e) {
-                                Toast.makeText(MainActivity.this, "'连接失败'", Toast.LENGTH_SHORT).show();
-                                e.printStackTrace();
-                            }
-                        }
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                if(SocketClickManager.getInstance().isConnected()){
+                    //isconnected 跳转页面
+                    Intent intent = new Intent();
+                    intent.setClass(MainActivity.this, SetActivity.class);
+                    startActivity(intent);
+                }else{
+                    Toast.makeText(MainActivity.this,"连接失败",Toast.LENGTH_LONG).show();
                 }
-            }).start();
+            }
         }
     };
-
 }

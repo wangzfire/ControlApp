@@ -1,5 +1,6 @@
 package control.app;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -10,16 +11,14 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.net.Socket;
-
 
 /**
  * Created by ac0b on 2019/5/23.
  */
 
 public class SetActivity extends AppCompatActivity {
+    private static final String TAG = "SetActivity";
     private static final String[] m = {"A", "B", "C", "D"};
     private Spinner spinner_one, spinner_two, spinner_three;
     private ImageView image;
@@ -50,9 +49,7 @@ public class SetActivity extends AppCompatActivity {
                 String name = adapter.getItem(i).toString();
                 postArr[0] = name;
                 Log.i("spinner_one", name);
-
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
 
@@ -65,7 +62,6 @@ public class SetActivity extends AppCompatActivity {
                 postArr[1] = name;
                 Log.i("spinner_two", name);
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
 
@@ -78,7 +74,6 @@ public class SetActivity extends AppCompatActivity {
                 postArr[2] = name;
                 Log.i("spinner_three", name);
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
 
@@ -103,20 +98,18 @@ public class SetActivity extends AppCompatActivity {
     private View.OnClickListener buttonSettingClick = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            Log.v("MainActivity", "start");
-            Log.i("spinner_arr0", postArr[0]);
-            Log.i("spinner_arr1", postArr[1]);
-            Log.i("spinner_arr2", postArr[2]);
-            try {
-                PrintWriter mBufferedWriter = SocketService.Output();
-                Log.v("MainActivity", "try");
-                mBufferedWriter.write(postArr[2], 0, postArr[2].length());
-                mBufferedWriter.flush();
-                Log.v("MainActivity", "发送成功");
-            } catch (IOException e) {
-                Log.v("MainActivity", "发送失败");
-                e.printStackTrace();
+            if(SocketClickManager.getInstance().isConnected()){
+                boolean isSendSuccess = SocketClickManager.getInstance().sendMessage(postArr[2]);
+                Log.i(TAG, isSendSuccess ? "发送成功 ":"发送失败" );
+                if(isSendSuccess){
+                    //设置成功 跳转到接收消息页面
+                    Intent intent = new Intent();
+                    intent.setClass(SetActivity.this, ResultActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
             }
+
         }
     };
 }

@@ -11,11 +11,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <service
-            android:name=".SocketService"
-            android:enabled="true"
-            android:exported="true"></service>
-
+        <service android:name=".SocketIntentService"></service>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,6 +20,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".SetActivity" />
+        <activity android:name=".ResultActivity" />
     </application>
 
 </manifest>

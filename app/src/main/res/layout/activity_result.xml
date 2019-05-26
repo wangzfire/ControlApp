@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center">
+
+    <RelativeLayout
+        android:id="@+id/res_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:gravity="center">
+        <FrameLayout
+            android:id="@+id/show_layout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="55dp"
+            android:gravity="center">
+            <TextView
+                android:id="@+id/result"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="88dp"
+                android:layout_marginTop="51dp"
+                android:text="TextView" />
+        </FrameLayout>
+        <Button
+            android:id="@+id/disconnect"
+            android:layout_width="fill_parent"
+            android:layout_height="44dp"
+            android:layout_below="@id/show_layout"
+            android:layout_marginTop="30dp"
+            android:background="#ff336699"
+            android:gravity="center"
+            android:text="关闭连接"
+            android:textColor="@android:color/white" />
+    </RelativeLayout>
+</LinearLayout>
