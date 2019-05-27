@@ -1,5 +1,6 @@
 package control.app;
 
+import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -33,10 +34,13 @@ public class SocketClickManager {
     private BufferedWriter mBufferedWriter;
 
     private static final int WHAT_ACCEPT_MESSAGE = 0x01;
+    private static final int WHAT_CONNECTION_RESULT = 0x02;
 
     private ObserverHandler mObserverHandler;
 
     private List<AcceptMessageObserver> mAcceptMessageObserverList;
+
+    private ConnectionCallback mConnectionCallback;
 
     private SocketClickManager() {
         mSocket = new Socket();
@@ -69,6 +73,11 @@ public class SocketClickManager {
         return null != mSocket && mSocket.isConnected() && !mSocket.isClosed();
     }
 
+    public void connect(Context context, String hostName, int port, int timeout, ConnectionCallback callback) {
+        this.mConnectionCallback = callback;
+        SocketIntentService.startService(context, hostName, port, timeout);
+    }
+
     /**
      * 连接服务端.
      *
@@ -92,12 +101,15 @@ public class SocketClickManager {
 
                 observerAcceptMessage();
 
+                mObserverHandler.obtainMessage(WHAT_CONNECTION_RESULT, true);
                 return true;
             } else {
+                mObserverHandler.obtainMessage(WHAT_CONNECTION_RESULT, false);
                 return false;
             }
         } catch (IOException e) {
             Log.e(TAG, "连接失败：" + e.getMessage());
+            mObserverHandler.obtainMessage(WHAT_CONNECTION_RESULT, false);
             return false;
         }
     }
@@ -161,6 +173,7 @@ public class SocketClickManager {
         try {
             mBufferedWriter.write(message, 0, message.length());
             mBufferedWriter.flush();
+            Log.e(TAG, "发送数据成功：" + message);
             return true;
         } catch (IOException e) {
             Log.e(TAG, "发送数据失败：" + e.getMessage());
@@ -214,6 +227,10 @@ public class SocketClickManager {
             super.dispatchMessage(msg);
             if (WHAT_ACCEPT_MESSAGE == msg.what) {
                 manager.notifyObserve((String) msg.obj);
+            } else if (WHAT_CONNECTION_RESULT == msg.what) {
+                if (null != manager.mConnectionCallback) {
+                    manager.mConnectionCallback.callback((Boolean) msg.obj);
+                }
             }
         }
     }
