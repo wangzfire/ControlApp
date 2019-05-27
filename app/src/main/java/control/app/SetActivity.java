@@ -101,14 +101,13 @@ public class SetActivity extends AppCompatActivity implements View.OnClickListen
 
     private void setting() {
         if (SocketClickManager.getInstance().isConnected()) {
-            boolean isSendSuccess = SocketClickManager.getInstance().sendMessage(postArr[2]);
-            if (isSendSuccess) {
-                //设置成功 跳转到接收消息页面
-                Intent intent = new Intent();
-                intent.setClass(SetActivity.this, ResultActivity.class);
-                startActivity(intent);
-                finish();
-            }
+            SocketClickManager.getInstance().sendMessage(postArr[2]);
+            //设置成功 跳转到接收消息页面
+            Intent intent = new Intent();
+            intent.setClass(SetActivity.this, ResultActivity.class);
+            startActivity(intent);
+            finish();
+
         }
     }
 

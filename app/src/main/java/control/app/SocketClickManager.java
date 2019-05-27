@@ -35,7 +35,6 @@ public class SocketClickManager {
 
     private static final int WHAT_ACCEPT_MESSAGE = 0x01;
     private static final int WHAT_CONNECTION_RESULT = 0x02;
-    private static final int WHAT_PREPARE_READ = 0x03;
 
     private ObserverHandler mObserverHandler;
 
@@ -104,18 +103,21 @@ public class SocketClickManager {
                 mBufferedReader = new BufferedReader(new InputStreamReader(mSocket.getInputStream()));
                 mBufferedWriter = new BufferedWriter(new OutputStreamWriter(mSocket.getOutputStream()));
 
-                mObserverHandler.obtainMessage(WHAT_CONNECTION_RESULT, true);
+                mObserverHandler.obtainMessage(WHAT_CONNECTION_RESULT, true)
+                        .sendToTarget();
 
-                mObserverHandler.obtainMessage(WHAT_PREPARE_READ);
+                observerAcceptMessage();
 
                 return true;
             } else {
-                mObserverHandler.obtainMessage(WHAT_CONNECTION_RESULT, false);
+                mObserverHandler.obtainMessage(WHAT_CONNECTION_RESULT, false)
+                        .sendToTarget();
                 return false;
             }
         } catch (IOException e) {
             Log.e(TAG, "连接失败：" + e.getMessage());
-            mObserverHandler.obtainMessage(WHAT_CONNECTION_RESULT, false);
+            mObserverHandler.obtainMessage(WHAT_CONNECTION_RESULT, false)
+                    .sendToTarget();
             return false;
         }
     }
@@ -167,11 +169,15 @@ public class SocketClickManager {
      * @param message 需要发送的消息.
      * @return true发送成功(注 ： 空消息也返回true ， 但是实际未发送), false发送失败.
      */
-    public boolean sendMessage(String message) {
+    public void sendMessage(final String message) {
         if (null != message && !message.isEmpty()) {
-            return _sendMessage(message);
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    boolean result = _sendMessage(message);
+                }
+            }).start();
         }
-        return true;
     }
 
     private boolean _sendMessage(String message) {
@@ -237,8 +243,6 @@ public class SocketClickManager {
                 if (null != manager.mConnectionCallback) {
                     manager.mConnectionCallback.callback((Boolean) msg.obj);
                 }
-            } else if (WHAT_PREPARE_READ == msg.what) {//准备接收消息.
-                manager.observerAcceptMessage();
             }
         }
     }
