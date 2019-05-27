@@ -35,6 +35,7 @@ public class SocketClickManager {
 
     private static final int WHAT_ACCEPT_MESSAGE = 0x01;
     private static final int WHAT_CONNECTION_RESULT = 0x02;
+    private static final int WHAT_PREPARE_READ = 0x03;
 
     private ObserverHandler mObserverHandler;
 
@@ -73,6 +74,10 @@ public class SocketClickManager {
         return null != mSocket && mSocket.isConnected() && !mSocket.isClosed();
     }
 
+    public void setConnectionCallback(ConnectionCallback connectionCallback) {
+        mConnectionCallback = connectionCallback;
+    }
+
     public void connect(Context context, String hostName, int port, int timeout, ConnectionCallback callback) {
         this.mConnectionCallback = callback;
         SocketIntentService.startService(context, hostName, port, timeout);
@@ -99,9 +104,10 @@ public class SocketClickManager {
                 mBufferedReader = new BufferedReader(new InputStreamReader(mSocket.getInputStream()));
                 mBufferedWriter = new BufferedWriter(new OutputStreamWriter(mSocket.getOutputStream()));
 
-                observerAcceptMessage();
-
                 mObserverHandler.obtainMessage(WHAT_CONNECTION_RESULT, true);
+
+                mObserverHandler.obtainMessage(WHAT_PREPARE_READ);
+
                 return true;
             } else {
                 mObserverHandler.obtainMessage(WHAT_CONNECTION_RESULT, false);
@@ -192,11 +198,11 @@ public class SocketClickManager {
                 while (null != line) {
                     Log.i(TAG, "客户端收到服务端消息：" + line);
 
-                    line = mBufferedReader.readLine();
-
                     //通过handler将消息发送到主线程.
                     mObserverHandler.obtainMessage(WHAT_ACCEPT_MESSAGE, line)
                             .sendToTarget();
+
+                    line = mBufferedReader.readLine();
                 }
             } catch (IOException e) {
                 Log.i(TAG, "客户端接收服务端消息失败!!!");
@@ -225,12 +231,14 @@ public class SocketClickManager {
         @Override
         public void dispatchMessage(Message msg) {
             super.dispatchMessage(msg);
-            if (WHAT_ACCEPT_MESSAGE == msg.what) {
+            if (WHAT_ACCEPT_MESSAGE == msg.what) {//收到消息.
                 manager.notifyObserve((String) msg.obj);
-            } else if (WHAT_CONNECTION_RESULT == msg.what) {
+            } else if (WHAT_CONNECTION_RESULT == msg.what) {//连接成功.
                 if (null != manager.mConnectionCallback) {
                     manager.mConnectionCallback.callback((Boolean) msg.obj);
                 }
+            } else if (WHAT_PREPARE_READ == msg.what) {//准备接收消息.
+                manager.observerAcceptMessage();
             }
         }
     }
